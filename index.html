@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <ul></ul>
+
+</body>
+<script>
+
+    const axiosInstance = axios.create({
+        baseURL: 'https://northwind.vercel.app/api/',
+        timeout: 1000
+    });
+
+    axiosInstance.interceptors.request.use(function (config) {
+
+
+        return config;
+    }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+    });
+
+
+    axiosInstance.get('products')
+        .then(res => {
+            console.log('Response', res.data);
+            var products = res.data;
+            var ul = document.querySelector('ul');
+
+            products.forEach(product => {
+                var li = document.createElement('li');
+                li.innerHTML = product.name + ' - ' + product.unitPrice;
+                if (product.unitPrice > 50) {
+                    li.style.color = 'red';
+                }
+                ul.appendChild(li);
+            });
+        })
+
+</script>
+
+</html>
